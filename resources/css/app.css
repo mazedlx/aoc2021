@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import '~highlight.js/styles/rainbow.css';
+@import '~highlight.js/styles/base16/dracula';
 
 .text-shadow {
     text-shadow: 0 0 2px #99ff99, 0 0 5px #99ff99;

@@ -14,6 +14,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 highlight_js_lib_core__WEBPACK_IMPORTED_MODULE_0__["default"].registerLanguage('php', highlight_js_lib_languages_php__WEBPACK_IMPORTED_MODULE_1__["default"]);
+highlight_js_lib_core__WEBPACK_IMPORTED_MODULE_0__["default"].highlightAll();
+window.hljs = highlight_js_lib_core__WEBPACK_IMPORTED_MODULE_0__["default"];
 
 /***/ }),
 
