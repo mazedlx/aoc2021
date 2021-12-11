@@ -5,5 +5,5 @@
         <code class="language-php">{{ $code }}</code>
     </pre>
 
-    <div>Part 1: <span class="border-px border-light-gray">{{ $solution }}</span></div>
+    <div>Part {{ $part }}: <span class="border-px border-light-gray">{{ $solution }}</span></div>
 </div>

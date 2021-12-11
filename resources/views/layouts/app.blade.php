@@ -11,7 +11,7 @@
     @livewireStyles
     <script src="{{ mix('js/app.js') }}" defer></script>
 </head>
-<body class="bg-blue text-gray font-code font-extralight text-[14pt]">
+<body class="bg-blue text-gray font-code font-extralight text-[14pt] mb-10">
     {{ $slot }}
 
     @livewireScripts
