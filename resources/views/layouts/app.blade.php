@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -12,6 +12,7 @@
 </head>
 <body class="bg-blue text-gray font-code font-extralight text-[14pt]">
     {{ $slot }}
+
     @livewireScripts
 </body>
 </html>

@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import '~highlight.js/styles/rainbow.css';
+
 .text-shadow {
     text-shadow: 0 0 2px #99ff99, 0 0 5px #99ff99;
 }
