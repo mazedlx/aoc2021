@@ -15,15 +15,11 @@ class Day01 extends Component
 
     public function mount()
     {
-        $this->input = Storage::disk('public')->get('input01.txt');
-        $this->codeOne = Storage::disk('public')->get('day01_1.txt');
-        $this->codeTwo = Storage::disk('public')->get('day01_2.txt');
-    }
-
-    public function render()
-    {
+        $this->input = Storage::disk('files')->get('input01.txt');
+        $this->codeOne = Storage::disk('files')->get('day01_1.txt');
+        $this->codeTwo = Storage::disk('files')->get('day01_2.txt');
         $numbers = collect(explode(\PHP_EOL, $this->input))
-            ->map(fn ($number) => (int) $number);
+        ->map(fn ($number) => (int) $number);
         $increased = 0;
         for ($i = 1; $i < \count($numbers); $i++) {
             if ($numbers[$i] > $numbers[$i - 1]) {
@@ -44,7 +40,10 @@ class Day01 extends Component
         }
 
         $this->partTwo = $increased;
+    }
 
+    public function render()
+    {
         return view('livewire.day01');
     }
 }
