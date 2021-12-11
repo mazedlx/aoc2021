@@ -8,8 +8,8 @@ use Livewire\Component;
 class Day01 extends Component
 {
     public $input;
-    public $partOne;
-    public $partTwo;
+    public $solutionOne;
+    public $solutionTwo;
     public $codeOne;
     public $codeTwo;
 
@@ -27,7 +27,7 @@ class Day01 extends Component
             }
         }
 
-        $this->partOne = $increased;
+        $this->solutionOne = $increased;
 
         $increased = 0;
         for ($i = 0; $i < \count($numbers) - 3; $i++) {
@@ -39,7 +39,7 @@ class Day01 extends Component
             }
         }
 
-        $this->partTwo = $increased;
+        $this->solutionTwo = $increased;
     }
 
     public function render()

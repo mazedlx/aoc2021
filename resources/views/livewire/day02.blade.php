@@ -1,3 +1,7 @@
-<div>
-    {{-- Nothing in the world is as soft and yielding as water. --}}
-</div>
+<x-day
+    day="02"
+    :codeOne="$codeOne"
+    :codeTwo="$codeTwo"
+    :solutionOne="$solutionOne"
+    :solutionTwo="$solutionTwo"
+/>

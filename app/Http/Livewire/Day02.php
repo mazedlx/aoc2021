@@ -8,14 +8,14 @@ use Livewire\Component;
 class Day02 extends Component
 {
     public $input;
-    public $partOne;
-    public $partTwo;
+    public $solutionOne;
+    public $solutionTwo;
     public $codeOne;
     public $codeTwo;
 
     public function mount()
     {
-        $this->input = Storage::disk('files')->get('input02.txt');
+        $this->input = trim(Storage::disk('files')->get('input02.txt'));
         $this->codeOne = Storage::disk('files')->get('day02_1.txt');
         $this->codeTwo = Storage::disk('files')->get('day02_2.txt');
         $x = 0;
@@ -33,7 +33,7 @@ class Day02 extends Component
             }
         }
 
-        $this->partOne = $x * $y;
+        $this->solutionOne = $x * $y;
 
         $x = 0;
         $y = 0;
@@ -52,7 +52,7 @@ class Day02 extends Component
             }
         }
 
-        $this->partTwo = $x * $y;
+        $this->solutionTwo = $x * $y;
     }
 
     public function render()
