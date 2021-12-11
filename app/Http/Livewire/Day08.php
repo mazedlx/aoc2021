@@ -20,15 +20,15 @@ class Day08 extends Component
         $this->codeTwo = Storage::disk('files')->get('day08_2.txt');
 
         $this->solutionOne = collect(explode(\PHP_EOL, $this->input))
-            ->map(fn ($line) => explode(' | ', $line)[1])
-            ->map(fn ($line) => explode(' ', $line))
-            ->map(
-                fn ($line) => collect($line)
-                ->filter(fn ($item) => \in_array(mb_strlen($item), [2, 3, 4, 7], true))
+        ->map(fn ($line) => explode(' | ', $line)[1])
+        ->map(fn ($line) => explode(' ', $line))
+        ->map(
+            fn ($line) => collect($line)
+            ->filter(fn ($item) => \in_array(mb_strlen($item), [2, 3, 4, 7], true))
             )->flatten()
             ->count();
 
-        function chars_found($string, $chars)
+        function findChars($string, $chars)
         {
             $found = 0;
             foreach (mb_str_split($chars) as $char) {
@@ -43,74 +43,72 @@ class Day08 extends Component
         $lines = explode(\PHP_EOL, $this->input);
         $count = 0;
         foreach ($lines as $line) {
-            $segs = [];
-            $digs = [];
+            $segments = [];
+            $digits = [];
             preg_match_all('/[a-g]+/', $line, $bits);
-            //bits[0][0-9] are the potential, [10-13] are the outputs
-            //pass one, sort everything alpha and find the easy bits (1,4,7,8)
             for ($i = 0; $i < \count($bits[0]); $i++) {
                 $temp = mb_str_split($bits[0][$i]);
                 sort($temp, \SORT_STRING);
                 $bits[0][$i] = implode('', $temp);
 
-                $t = $bits[0][$i];
-                $s = mb_strlen($bits[0][$i]);
-                switch ($s) {
-            case 2:
-                $segs[1] = $t;
-                $digs[$t] = 1;
-                break;
-            case 3:
-                $segs[7] = $t;
-                $digs[$t] = 7;
-                break;
-            case 4:
-                $segs[4] = $t;
-                $digs[$t] = 4;
-                break;
-            case 7:
-                $segs[8] = $t;
-                $digs[$t] = 8;
-                break;
-        }
+                $positionalBit = $bits[0][$i];
+                $length = mb_strlen($bits[0][$i]);
+                switch ($length) {
+                    case 2:
+                        $segments[1] = $positionalBit;
+                        $digits[$positionalBit] = 1;
+                        break;
+                    case 3:
+                        $segments[7] = $positionalBit;
+                        $digits[$positionalBit] = 7;
+                        break;
+                    case 4:
+                        $segments[4] = $positionalBit;
+                        $digits[$positionalBit] = 4;
+                        break;
+                    case 7:
+                        $segments[8] = $positionalBit;
+                        $digits[$positionalBit] = 8;
+                        break;
+                    }
             }
-            //pass two, find 3, 6 and 9
+
             for ($i = 0; $i < 10; $i++) {
-                $t = $bits[0][$i];
-                $s = mb_strlen($bits[0][$i]);
-                if (! isset($digs[$t])) {
-                    if (5 === $s && 2 === chars_found($t, $segs[1])) {
-                        $segs[3] = $t;
-                        $digs[$t] = 3;
-                    } elseif (6 === $s && 4 === chars_found($t, $segs[4])) {
-                        $segs[9] = $t;
-                        $digs[$t] = 9;
-                    } elseif (6 === $s && 1 === chars_found($t, $segs[1])) {
-                        $segs[6] = $t;
-                        $digs[$t] = 6;
+                $positionalBit = $bits[0][$i];
+                $length = mb_strlen($bits[0][$i]);
+                if (! isset($digits[$positionalBit])) {
+                    if (5 === $length && 2 === findChars($positionalBit, $segments[1])) {
+                        $segments[3] = $positionalBit;
+                        $digits[$positionalBit] = 3;
+                    } elseif (6 === $length && 4 === findChars($positionalBit, $segments[4])) {
+                        $segments[9] = $positionalBit;
+                        $digits[$positionalBit] = 9;
+                    } elseif (6 === $length && 1 === findChars($positionalBit, $segments[1])) {
+                        $segments[6] = $positionalBit;
+                        $digits[$positionalBit] = 6;
                     }
                 }
             }
-            //pass three, find 0, 2, 5
+
             for ($i = 0; $i < 10; $i++) {
-                $t = $bits[0][$i];
-                $s = mb_strlen($bits[0][$i]);
-                if (! isset($digs[$t])) {
-                    if (6 === $s) {
-                        $segs[0] = $t;
-                        $digs[$t] = 0;
-                    } elseif (5 === $s && 5 === chars_found($segs[6], $t)) {
-                        $segs[5] = $t;
-                        $digs[$t] = 5;
-                    } elseif (5 === $s && 4 === chars_found($segs[6], $t)) {
-                        $segs[2] = $t;
-                        $digs[$t] = 2;
+                $positionalBit = $bits[0][$i];
+                $length = mb_strlen($bits[0][$i]);
+                if (! isset($digits[$positionalBit])) {
+                    if (6 === $length) {
+                        $segments[0] = $positionalBit;
+                        $digits[$positionalBit] = 0;
+                    } elseif (5 === $length && 5 === findChars($segments[6], $positionalBit)) {
+                        $segments[5] = $positionalBit;
+                        $digits[$positionalBit] = 5;
+                    } elseif (5 === $length && 4 === findChars($segments[6], $positionalBit)) {
+                        $segments[2] = $positionalBit;
+                        $digits[$positionalBit] = 2;
                     }
                 }
             }
             $digit = '';
             for ($i = 10; $i <= 13; $i++) {
-                $digit .= $digs[$bits[0][$i]];
+                $digit .= $digits[$bits[0][$i]];
             }
             $count += (int) $digit;
         }
