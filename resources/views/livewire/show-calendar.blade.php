@@ -10,9 +10,9 @@
                 class="inline-flex items-center justify-center w-full px-4 py-8 border-2 border-gray hover:text-light-green text-green"
             >Day {{ $day }}</a>
         @else
-        <div class="inline-flex items-center justify-center w-full px-4 py-8 border-2 border-gray text-gray">
-            Day {{ $day }}
-        </div>
+            <div class="inline-flex items-center justify-center w-full px-4 py-8 border-2 border-gray text-gray">
+                Day {{ $day }}
+            </div>
         @endif
         </div>
         @endforeach
