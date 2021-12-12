@@ -1,0 +1,57 @@
+<?php
+
+$input = '010100010111
+...
+100010001111';
+
+function splitDigits($array): array
+{
+    $values = [];
+    foreach ($array as $line) {
+        foreach (str_split($line) as $index => $bit) {
+            switch ($bit) {
+                case '0':
+                    $values[$index]['zero'] =
+                        ($values[$index]['zero'] ?? 0) + 1;
+                    break;
+                case '1':
+                    $values[$index]['one'] = ($values[$index]['one'] ?? 0) + 1;
+                    break;
+            }
+        }
+    }
+    return $values;
+}
+$lines = explode(PHP_EOL, $input);
+
+$values = splitDigits($lines);
+
+$numbers = $lines;
+
+$i = 0;
+while (count($numbers) !== 1) {
+    $digit = $values[$i]['one'] >= $values[$i]['zero'] ? '1' : '0';
+    $numbers = array_filter($numbers, function ($number) use ($i, $digit) {
+        return str_split($number)[$i] == $digit;
+    });
+    $values = splitDigits($numbers);
+    $i++;
+}
+
+$oxygenRating = bindec(implode('', $numbers));
+
+$numbers = $lines;
+$i = 0;
+$values = splitDigits($lines);
+
+while (count($numbers) !== 1) {
+    $digit = $values[$i]['one'] >= $values[$i]['zero'] ? '0' : '1';
+    $numbers = array_filter($numbers, function ($number) use ($i, $digit) {
+        return str_split($number)[$i] == $digit;
+    });
+    $values = splitDigits($numbers);
+    $i++;
+}
+
+$scrubberRating = bindec(implode('', $numbers));
+echo 'Part 2: ' . $oxygenRating * $scrubberRating;

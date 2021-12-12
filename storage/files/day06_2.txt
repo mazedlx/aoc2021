@@ -1,0 +1,24 @@
+<?php
+
+$input = '1,...,1';
+
+$fish = explode(',', $this->input);
+
+$groupedFish = array_fill(0, 8, 0);
+
+foreach ($fish as $key) {
+    $groupedFish[$key]++;
+}
+
+for ($day = 1; $day <= 256; $day++) {
+    $newFish = $groupedFish[0];
+
+    for ($x = 1; $x <= 8; $x++) {
+        $groupedFish[$x - 1] = $groupedFish[$x] ?? 0;
+    }
+
+    $groupedFish[6] += $newFish;
+    $groupedFish[8] = $newFish;
+}
+
+$this->solutionTwo = array_sum($groupedFish);

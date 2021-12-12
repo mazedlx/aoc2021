@@ -1,0 +1,37 @@
+<?php
+
+$input = '010100010111
+...
+100010001111';
+
+$values = [];
+
+foreach (explode(PHP_EOL, $input) as $line) {
+    foreach (str_split($line) as $index => $bit) {
+        switch ($bit) {
+            case '0':
+                $values[$index]['zero'] = ($values[$index]['zero'] ?? 0) + 1;
+                break;
+            case '1':
+                $values[$index]['one'] = ($values[$index]['one'] ?? 0) + 1;
+                break;
+        }
+    }
+}
+
+$gammaDigits = [];
+$epsilonDigits = [];
+
+foreach ($values as $index => $onesAndZeros) {
+    $gammaDigits[$index] = 0;
+    $epsilonDigits[$index] = 0;
+    if ($onesAndZeros['one'] > $onesAndZeros['zero']) {
+        $gammaDigits[$index] = 1;
+    }
+    if ($onesAndZeros['one'] < $onesAndZeros['zero']) {
+        $epsilonDigits[$index] = 1;
+    }
+}
+
+echo 'Part 1: ' .
+    bindec(implode('', $gammaDigits)) * bindec(implode('', $epsilonDigits));

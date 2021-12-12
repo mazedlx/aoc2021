@@ -1,0 +1,39 @@
+<?php
+
+$input = '[...)';
+
+echo 'Part 1: ' . collect(explode(PHP_EOL, $input))
+    ->map(function ($line) {
+        while (true) {
+            $old = $line;
+            $line = str_replace(['<>', '()', '{}', '[]'], '', $line);
+            if ($old === $line) {
+                break;
+            }
+        }
+
+        $expectations = [
+            '[' => ']',
+            '{' => '}',
+            '(' => ')',
+            '<' => '>',
+        ];
+
+        $points = [
+            ']' => 57,
+            '}' => 1197,
+            ')' => 3,
+            '>' => 25137,
+        ];
+
+        foreach (str_split($line) as $index => $char) {
+            if (in_array($char, ['>', '}', ']', ')'])) {
+                $expected = $expectations[$line[$index - 1]];
+                $found = $char;
+                return $points[$found];
+                break;
+            }
+        }
+    })
+    ->filter()
+    ->reduce(fn ($carry, $item) => $carry + $item, 0);

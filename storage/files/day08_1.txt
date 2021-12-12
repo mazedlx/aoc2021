@@ -1,0 +1,11 @@
+<?php
+
+$input = 'badf ... afbceg';
+
+echo 'Part 1: ' . collect(explode(PHP_EOL, $input))
+    ->map(fn($line) => explode(' | ', $line)[1])
+    ->map(fn ($line) => explode(' ', $line))
+    ->map(
+    	fn ($line) => collect($line)
+            ->filter(fn ($item) => in_array(strlen($item), [2,3,4,7]))
+    )->flatten()->count();

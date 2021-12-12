@@ -1,0 +1,60 @@
+<?php
+$input = '[...)';
+
+$expectations = [
+    '[' => ']',
+    '{' => '}',
+    '(' => ')',
+    '<' => '>',
+    ']' => '',
+    '}' => '',
+    ')' => '',
+    '>' => '',
+];
+
+$points = [
+    ']' => 2,
+    '}' => 3,
+    ')' => 1,
+    '>' => 4,
+];
+
+$numbers = collect(explode(PHP_EOL, $input))
+    ->map(function ($line) {
+        $original = $line;
+        while (true) {
+            $old = $line;
+            $line = str_replace(['<>', '()', '{}', '[]'], '', $line);
+            if ($old === $line) {
+                break;
+            }
+        }
+
+        if (! strstr(str_replace(['>', '}', ']', ')'], 'x', $line), 'x')) {
+            return $line;
+        }
+    })
+    ->filter()
+	->map(function ($line) use ($expectations) {
+        while (true) {
+            $old = $line;
+            $line = str_replace(['<>', '()', '{}', '[]'], '', $line);
+
+            if ($old === $line) {
+                break;
+            }
+        }
+        $chars = str_split($line);
+        krsort($chars);
+
+    	return collect($chars)
+        	->map(fn ($char) => $expectations[$char])
+            ->sortKeysDesc()->join('');
+	})
+    ->map(fn ($line) => str_split(str_replace(array_keys($points), $points, $line)))
+    ->map(fn ($line) => collect($line)->reduce(function ($carry, $item) {
+        return ($carry * 5) + $item;
+    }, 0))->sort();
+
+
+echo 'Part 2: ' . $numbers->skip(floor($numbers->count() / 2))->take(1)->values()[0];

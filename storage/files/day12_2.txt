@@ -1,0 +1,50 @@
+<?php
+
+$input = 'hl-WP
+...
+ps-dz';
+
+$lines = collect(explode(PHP_EOL, $input))
+    ->map(fn($line) => explode('-', $line))
+    ->values()
+    ->toArray();
+
+$connections = [];
+foreach ($lines as $line) {
+    [$a, $b] = $line;
+    if ($b !== 'start' && $a !== 'end') {
+        $connections[$a][] = $b;
+    }
+    if ($a !== 'start' && $b !== 'end') {
+        $connections[$b][] = $a;
+    }
+}
+
+$validPaths = [];
+$paths = [
+    ['start'],
+];
+
+while (count($paths)) {
+    $nextPaths = [];
+    foreach ($paths as $path) {
+		$cave = $path[count($path) - 1];
+        foreach ($connections[$cave] as $nextCave) {
+            $nextPath = [...$path, $nextCave];
+            if ($nextCave === 'end') {
+                $validPaths[] = $nextPath;
+                continue;
+            }
+            $smallCaves = array_filter(
+                $nextPath, fn ($cave) => preg_match('/[a-z]/', $cave)
+            );
+            if (count ($smallCaves) > count(array_unique($smallCaves)) + 1) {
+                continue;
+            }
+	        $nextPaths[] = $nextPath;
+        }
+    }
+    $paths = $nextPaths;
+}
+
+echo 'Part 2: ' . count($validPaths);

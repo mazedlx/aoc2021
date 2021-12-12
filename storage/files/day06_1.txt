@@ -1,0 +1,17 @@
+<?php
+
+$input = '1,...,1';
+
+$fish = explode(',', $input);
+
+for ($day = 0; $day < 80; $day++) {
+    foreach ($fish as $index => $f) {
+        $fish[$index] -= 1;
+        if ($fish[$index] === -1) {
+            $fish[$index] = 6;
+            $fish[] = 8;
+        }
+    }
+}
+
+echo 'Part 1: ' . count($fish);

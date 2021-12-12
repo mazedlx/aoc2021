@@ -1,0 +1,37 @@
+<?php
+
+$input = '8...9';
+
+$tubeField = collect(explode(\PHP_EOL, $this->input))
+    ->map(fn ($line) => mb_str_split($line))
+    ->values()
+    ->toArray();
+
+$lowerLevels = [];
+$lowerLevelPositions = [];
+foreach ($tubeField as $y => $tubes) {
+    foreach ($tubes as $x => $tube) {
+        $neighbours = [];
+        if (isset($tubeField[$y][$x - 1])) {
+            $neighbours[] = $tubeField[$y][$x - 1];
+        }
+        if (isset($tubeField[$y - 1][$x])) {
+            $neighbours[] = $tubeField[$y - 1][$x];
+        }
+        if (isset($tubeField[$y][$x + 1])) {
+            $neighbours[] = $tubeField[$y][$x + 1];
+        }
+        if (isset($tubeField[$y + 1][$x])) {
+            $neighbours[] = $tubeField[$y + 1][$x];
+        }
+
+        $min = collect($neighbours)->min();
+
+        if ($tube < $min) {
+            $lowerLevels[] = (int) $tube;
+            $lowerLevelPositions[] = [$y, $x];
+        }
+    }
+}
+
+echo "Part 1: " . array_sum($lowerLevels) + count($lowerLevels);

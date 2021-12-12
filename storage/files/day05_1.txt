@@ -1,0 +1,63 @@
+<?php
+
+$input = '657,934 -> 657,926
+...
+377,126 -> 700,126';
+
+$coords = collect(explode(PHP_EOL, $input))
+    ->map(fn ($line) => explode(' -> ', $line))
+    ->map(fn ($coords) =>
+        collect($coords)->map(fn($point) => explode(',', $point))
+     )->filter(
+    	fn ($points) => $points[0][0] === $points[1][0]
+    	|| $points[0][1] === $points[1][1]
+)->values()->toArray();
+
+$field = [];
+
+for($i = 0; $i < 1000; $i++) {
+for($j = 0; $j < 1000; $j++) {
+    $field[$i][$j] = '0';
+}
+
+}
+
+
+foreach ($coords as $coord) {
+	if ($coord[0][0] === $coord[1][0]) {
+        $start = $coord[0][1];
+        $end = $coord[1][1];
+        if ($end < $start) {
+            [$end, $start] = [$start, $end];
+        }
+
+        for ($i = $start; $i <= $end; $i++) {
+
+            $field[$i][$coord[0][0]] += 1;
+
+        }
+    }
+    if ($coord[0][1] === $coord[1][1]) {
+        $start = $coord[0][0];
+        $end = $coord[1][0];
+        if ($end < $start) {
+            [$end, $start] = [$start, $end];
+        }
+        for ($i = $start; $i <= $end; $i++) {
+            $field[$coord[0][1]][$i] += 1;
+        }
+    }
+}
+
+
+$overlappingPoints = collect($field)
+    ->map(
+    fn($row) => collect($row)
+    	->reduce(function($carry, $item) {
+    		if ($item >= 2) {
+        		return $carry + 1;
+    		}
+    		return $carry;
+		}))->filter()->reduce(fn($carry, $item) => $carry + $item);
+
+echo 'Part 1: ' . $overlappingPoints;

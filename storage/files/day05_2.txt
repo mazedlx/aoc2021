@@ -1,0 +1,75 @@
+<?php
+
+$input = '657,934 -> 657,926
+...
+377,126 -> 700,126';
+
+$coords = collect(explode(PHP_EOL, $input))
+    ->map(fn ($line) => explode(' -> ', $line))
+    ->map(fn ($coords) =>
+        collect($coords)->map(fn($point) => explode(',', $point))
+     )->values()->toArray();
+
+$field = [];
+
+for($i = 0; $i < 1000; $i++) {
+	for($j = 0; $j < 1000; $j++) {
+    	$field[$i][$j] = '0';
+	}
+}
+
+
+
+foreach ($coords as $coord) {
+
+    [$startY, $startX] = $coord[0];
+    [$endY, $endX] = $coord[1];
+
+    if ($endX > $startX && $endY === $startY) {
+        for ($i = $startX; $i <= $endX; $i++) {
+            $field[$i][$startY] += 1;
+        }
+    } elseif ($endX < $startX && $endY === $startY) {
+        for ($i = $startX; $i >= $endX; $i--) {
+            $field[$i][$startY] += 1;
+        }
+    } elseif ($endX === $startX && $endY > $startY) {
+        for ($j = $startY; $j <= $endY; $j++) {
+            $field[$startX][$j] += 1;
+        }
+    } elseif ($endX === $startX && $endY < $startY) {
+        for ($j = $startY; $j >= $endY; $j--) {
+            $field[$startX][$j] += 1;
+        }
+    } elseif ($endX > $startX && $endY > $startY) {
+        for ($i = $startX, $j = $startY; $i <= $endX; $i++, $j++) {
+            $field[$i][$j] += 1;
+        }
+    } elseif ($endX < $startX && $endY < $startY) {
+        for ($i = $startX, $j = $startY; $i >= $endX; $i--, $j--) {
+            $field[$i][$j] += 1;
+        }
+    } elseif ($endX > $startX && $endY < $startY) {
+        for ($i = $startX, $j = $startY; $i <= $endX; $i++, $j--) {
+            $field[$i][$j] += 1;
+        }
+    } elseif ($endX < $startX && $endY > $startY) {
+        for ($i = $startX, $j = $startY; $i >= $endX; $i--, $j++) {
+            $field[$i][$j] += 1;
+        }
+    }
+
+}
+
+
+$overlappingPoints = collect($field)
+    ->map(
+    fn($row) => collect($row)
+    	->reduce(function($carry, $item) {
+    		if ($item >= 2) {
+        		return $carry + 1;
+    		}
+    		return $carry;
+		}))->filter()->reduce(fn($carry, $item) => $carry + $item);
+
+echo 'Part 2: ' . $overlappingPoints;

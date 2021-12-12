@@ -1,0 +1,17 @@
+<?php
+
+$input = '1101,...,1379';
+
+$crabs = explode(',', $input);
+
+$positions = [];
+for ($i = 0; $i < count($crabs); $i++) {
+    foreach ($crabs as $pos => $crab) {
+
+        $value = array_reduce(range(0, abs($crab - $i)), fn($carry, $item) => $carry + $item, 0);
+
+        $positions[$i] = ($positions[$i] ?? 0) + $value;
+    }
+}
+
+collect($positions)->min();

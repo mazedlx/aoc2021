@@ -1,0 +1,22 @@
+<?php
+
+$input = 'forward 2
+...
+forward 1':
+
+$x = 0;
+$y = 0;
+
+foreach (explode(PHP_EOL, $input) as $inst) {
+    [$direction, $value] = preg_split('/\s/', $inst);
+
+    if ($direction === 'forward') {
+        $x += $value;
+    } elseif ($direction === 'up') {
+        $y -= $value;
+    } elseif ($direction === 'down') {
+        $y += $value;
+    }
+}
+
+echo 'Part 1: ' . $x * $y;
