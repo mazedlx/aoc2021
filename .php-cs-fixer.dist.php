@@ -1,6 +1,9 @@
 <?php
 
-$finder = PhpCsFixer\Finder::create()
+use PhpCsFixer\Config;
+use PhpCsFixer\Finder;
+
+$finder = Finder::create()
     ->exclude('bootstrap/cache')
     ->exclude('node_modules')
     ->exclude('storage')
@@ -9,7 +12,7 @@ $finder = PhpCsFixer\Finder::create()
     ->notName('.phpstorm.meta.php')
     ->notName('_ide_*.php');
 
-$config = new PhpCsFixer\Config();
+$config = new Config();
 
 return $config->setUsingCache(false)
     ->setRiskyAllowed(true)
