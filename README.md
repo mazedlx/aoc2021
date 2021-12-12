@@ -8,8 +8,5 @@ $ cd aoc2021
 $ composer install
 $ npm install
 $ npm run prod
-$ cd public
-$ php -S 127.0.0.1:2412
+$ php artisan serve
 ```
-
-Navigate to php http://127.0.0.1:2412
