@@ -36,5 +36,6 @@ return $config->setUsingCache(false)
         'strict_param' => true,
         'php_unit_method_casing' => ['case' => 'snake_case'],
         'php_unit_test_annotation' => ['style' => 'annotation'],
+        'method_chaining_indentation' => true,
     ])
     ->setFinder($finder);
