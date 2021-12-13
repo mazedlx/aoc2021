@@ -1,0 +1,80 @@
+<?php
+
+$input = '1159,502
+...
+fold along y=6';
+
+$points = collect(explode(PHP_EOL . PHP_EOL, $input)[0])
+    ->map(fn ($points) => explode(PHP_EOL, $points))
+    ->flatten()
+    ->map(fn($point) => explode(',', $point));
+
+$folds = collect(explode(PHP_EOL . PHP_EOL, $input)[1])
+    ->map(fn ($folds) => explode(PHP_EOL, $folds))
+    ->flatten()
+    ->map(fn ($folds) => explode('fold along ', $folds))
+    ->flatten()
+    ->filter()
+    ->map(fn ($fold) => explode('=', $fold))
+    ->values();
+
+$width = $points->map(fn ($point) => $point[0])->max();
+$height = $points->map(fn ($point) => $point[1])->max();
+
+
+for ($y = 0; $y <= $height; $y++) {
+    for ($x = 0; $x <= $width; $x++) {
+        $map[$y][$x] = false;
+    }
+}
+
+
+foreach ($points as $point) {
+    [$x, $y] = $point;
+    $map[$y][$x] = true;
+}
+
+foreach ($folds as $fold) {
+    [$direction, $crease] = $fold;
+
+    $folded = [];
+
+    if ($direction === 'y') {
+		$top = array_slice($map, 0, $crease);
+		$bottom = array_reverse(array_slice($map, $crease + 1));
+		if (count($bottom) > count($top)) {
+			$pad = array_fill(0, count($bottom) - count($top), array_fill(0, count($bottom[0]), false));
+			$top = array_merge($pad, $top);
+		} else if (count($top) > count($bottom)) {
+			$pad = array_fill(0, count($top) - count($bottom), array_fill(0, count($bottom[0]), false));
+			$bottom = array_merge($pad, $bottom);
+		}
+
+		$folded = array_map(
+			fn($topRow, $bottomRow) => array_map(fn($t, $b) => $t || $b, $topRow, $bottomRow),
+			$top,
+			$bottom
+		);
+	} elseif ($direction === 'x') {
+		foreach ($map as $row) {
+			$left = array_slice($row, 0, $crease);
+			$right = array_reverse(array_slice($row, $crease + 1));
+			if (count($right) > count($left)) {
+				$pad = array_fill(0, count($right) - count($left), false);
+				$left = array_merge($pad, $left);
+			} else if (count($left) > count($right)) {
+				$pad = array_fill(0, count($left) - count($right), false);
+				$right = array_merge($pad, $right);
+			}
+			$folded[] = array_map(fn($l, $r) => $l || $r, $left, $right);
+		}
+	}
+    $map = $folded;
+}
+
+
+echo 'Part 2: '
+    . PHP_EOL
+    . collect($map)
+    	->map(fn($line) => collect($line)->map(fn ($char) => $char ? '#' : ' ')->implode(''))
+    	->implode(PHP_EOL);
