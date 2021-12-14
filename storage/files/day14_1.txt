@@ -1,0 +1,45 @@
+$input = 'NNSOFOCNHBVVNOBSBHCB
+...
+FB -> N';
+
+$currentSequence = str_split(explode(PHP_EOL . PHP_EOL, $input)[0]);
+$pairs = collect(explode(PHP_EOL . PHP_EOL, $input)[1])
+    ->map(fn ($pairs) => explode(PHP_EOL, $pairs))
+    ->flatten()
+    ->map(fn ($pair) => explode(' -> ', $pair))
+    ->mapWithKeys(fn ($pair) => [
+        $pair[0] => [
+            str_split($pair[0])[0] . $pair[1],
+            $pair[1] . str_split($pair[0])[1], ,
+            ]
+        ]);
+
+$pairCounts = [];
+for ($i = 0; $i < count($currentSequence) - 1; $i++) {
+    $pair = implode('', array_slice($currentSequence, $i, 2));
+
+    $pairCounts[$pair] = ($pairCounts[$pair] ?? 0) + 1;
+}
+
+for ($step = 0; $step < 10; $step++) {
+    $nextCounts = [];
+    foreach ($pairCounts as $pair => $pairCount) {
+        foreach ($pairs[$pair] as $nextPair) {
+            $nextCounts[$nextPair]  = ($nextCounts[$nextPair] ?? 0) + $pairCounts[$pair];
+        }
+    }
+
+    $pairCounts = $nextCounts;
+
+}
+
+$charCounts = [];
+$charCounts[$currentSequence[0]] = 1;
+
+foreach ($pairCounts as $key => $pairCount) {
+    $charCounts[str_split($key)[1]] = ($charCounts[str_split($key)[1]] ?? 0) + $pairCount;
+}
+
+$min = collect($charCounts)->min();
+$max = collect($charCounts)->max();
+echo 'Part 1: ' . ($max - $min);
