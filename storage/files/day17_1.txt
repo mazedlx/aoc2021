@@ -1,0 +1,43 @@
+$input = 'target area: x=128..160, y=-142..-88';
+
+preg_match_all('/[\d-]+/', $input, $coords);
+
+$minX = $coords[0][0];
+$maxX = $coords[0][1];
+$minY = $coords[0][2];
+$maxY = $coords[0][3];
+
+$result = [];
+
+for ($sx = 1; $sx < 100; $sx++) {
+    for ($sy = -100; $sy < 100; $sy++) {
+        $tx = $sx;
+        $ty = $sy;
+
+        $x = 0;
+        $y = 0;
+
+        $hit = false;
+        $max = -100;
+
+        while ($x <= $maxX && $y >= $minY) {
+            $x += $tx;
+            $tx = max($tx - 1, 0);
+
+            $y += $ty;
+            $ty = $ty - 1;
+
+            $max = max($y, $max);
+
+            if ($x >= $minX && $x <= $maxX && $y >= $minY && $y <= $maxY) {
+                $hit = true;
+            }
+        }
+
+        if ($hit) {
+            $result[$sx . '/' . $sy] = $max;
+        }
+    }
+}
+
+echo 'Part 1: ' . max($result);

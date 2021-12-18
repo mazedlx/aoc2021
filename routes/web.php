@@ -16,6 +16,7 @@ use App\Http\Livewire\Day13;
 use App\Http\Livewire\Day14;
 use App\Http\Livewire\Day15;
 use App\Http\Livewire\Day16;
+use App\Http\Livewire\Day17;
 use App\Http\Livewire\ShowCalendar;
 use Illuminate\Support\Facades\Route;
 
@@ -37,3 +38,4 @@ Route::get('days/13', Day13::class);
 Route::get('days/14', Day14::class);
 Route::get('days/15', Day15::class);
 Route::get('days/16', Day16::class);
+Route::get('days/17', Day17::class);

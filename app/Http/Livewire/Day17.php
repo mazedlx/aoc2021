@@ -15,11 +15,11 @@ class Day17 extends Component
 
     public function mount()
     {
-        $this->codeOne = Storage::disk('files')->get('day07_1.txt');
-        $this->codeTwo = Storage::disk('files')->get('day07_2.txt');
+        $this->codeOne = Storage::disk('files')->get('day17_1.txt');
+        $this->codeTwo = Storage::disk('files')->get('day17_2.txt');
 
-        $this->solutionOne = 352707;
-        $this->solutionTwo = 95519693;
+        $this->solutionOne = 10011;
+        $this->solutionTwo = 2994;
     }
 
     public function render()
