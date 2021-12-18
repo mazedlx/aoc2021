@@ -1,0 +1,58 @@
+$input = '88979891
+...
+679';
+
+$map = collect(explode(PHP_EOL, $input))
+    ->map(fn($line) => str_split($line))
+    ->toArray();
+$visited = [];
+$size = count($map);
+
+foreach ($map as $y => $row) {
+    foreach ($row as $x => $value) {
+        for ($py = 0; $py < 5; $py++) {
+        	for ($px = 0; $px < 5; $px++) {
+    			$map[$size * $py + $y][$size * $px + $x] = $map[$y][$x] + $py + $px;
+                if ($map[$size * $py + $y][$size * $px + $x] > 9) {
+                    $map[$size * $py + $y][$size * $px + $x] -= 9;
+                }
+	        }
+        }
+    }
+}
+
+$queue = new SplPriorityQueue();
+$queue->insert(['x' => 0, 'y' => 0], 0);
+foreach ($map as $y => $row) {
+    foreach ($row as $x => $value) {
+        $visited[$y][$x] = PHP_INT_MAX;
+        if ($y != 0 || $x != 0) {
+            $queue->insert(['y' => $y, 'x' => $x], PHP_INT_MIN);
+        }
+    }
+}
+
+$visited[0][0] = 0;
+$vectors = [[0, -1], [0, 1], [-1, 0], [1, 0]];
+
+while (! $queue->isEmpty()) {
+    $mapInQueue = $queue->extract();
+    foreach ($vectors as list($dx, $dy)) {
+        $maxX = $mapInQueue['x'] + $dx;
+        $maxY = $mapInQueue['y'] + $dy;
+        if ($maxX >= 0 && $maxX < count($map) && $maxY >= 0 && $maxY < count($map[0])) {
+            $pos = $map[$maxX][$maxY];
+            if ($pos != 0 && $visited[$maxX][$maxY] > $visited[$mapInQueue['x']][$mapInQueue['y']] + $pos) {
+                $visited[$maxX][$maxY] = $visited[$mapInQueue['x']][$mapInQueue['y']] + $pos;
+              $queue->insert([
+                  'x' => $maxX,
+                  'y' => $maxY,
+                  ],
+                  -$visited[$maxX][$maxY]
+              );
+            }
+        }
+    }
+}
+
+echo 'Part 2: ' . $visited[count($map) - 1][count($map[0]) - 1];
